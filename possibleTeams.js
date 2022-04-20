@@ -53,24 +53,6 @@ const summoners = {
 	130: "dragon",
 };
 
-const splinters = ["fire", "life", "earth", "water", "death", "dragon"];
-
-const getSummoners = (myCards, splinters) => {
-	try {
-		const sumArray = summoners.map((x) => Number(Object.keys(x)[0]));
-		const mySummoners = myCards.filter((value) =>
-			sumArray.includes(Number(value))
-		);
-		const myAvailableSummoners = mySummoners.filter((id) =>
-			splinters.includes(summonerColor(id))
-		);
-		return myAvailableSummoners || mySummoners;
-	} catch (e) {
-		console.log(e);
-		return [];
-	}
-};
-
 const summonerColor = (id) => {
 	const summonerDetails = summoners.find((x) => x[id]);
 	return summonerDetails ? summonerDetails[id] : "";
@@ -147,7 +129,6 @@ const teamSelection = async (possibleTeams, matchDetails, quest) => {
 		);
 		console.log("play for the quest ", quest.splinter, "? ", questCheck);
 
-		//QUEST FOR V2
 		if (
 			left > 0 &&
 			filteredTeamsForQuest?.length >= 1 &&
@@ -174,54 +155,6 @@ const teamSelection = async (possibleTeams, matchDetails, quest) => {
 			};
 		}
 	}
-
-	//V2 Strategy ONLY FOR PRIVATE API
-	// if (process.env.API_VERSION == 2 && availableTeamsToPlay?.[0]?.[8]) {
-	// 	if (filterPreferredTeams?.length) {
-	// 		console.log(
-	// 			"play the highest winning rate team with preferred cards: ",
-	// 			filterPreferredTeams[0]
-	// 		);
-	// 		return {
-	// 			summoner: filterPreferredTeams[0][0],
-	// 			cards: filterPreferredTeams[0],
-	// 		};
-	// 	} else if (availableTeamsToPlay?.length) {
-	// 		console.log(
-	// 			"play the highest winning rate team: ",
-	// 			availableTeamsToPlay[0]
-	// 		);
-	// 		return {
-	// 			summoner: availableTeamsToPlay[0][0],
-	// 			cards: availableTeamsToPlay[0],
-	// 		};
-	// 	} else {
-	// 		console.log("NO available team to be played for V2");
-	// 		return null;
-	// 	}
-	// } else if (process.env.API_VERSION != 2 && availableTeamsToPlay[0][0]) {
-	// 	if (filterPreferredTeams?.length) {
-	// 		const res = await mostWinningSummonerTankCombo(
-	// 			filterPreferredTeams,
-	// 			matchDetails
-	// 		);
-	// 		if (res[0] && res[1]) {
-	// 			console.log(
-	// 				"Dont play for the quest, and play this with preferred cards:",
-	// 				res
-	// 			);
-	// 			return { summoner: res[0], cards: res[1] };
-	// 		}
-	// 	}
-	// 	const res = await mostWinningSummonerTankCombo(
-	// 		availableTeamsToPlay,
-	// 		matchDetails
-	// 	);
-	// 	if (res[0] && res[1]) {
-	// 		console.log("Dont play for the quest, and play this:", res);
-	// 		return { summoner: res[0], cards: res[1] };
-	// 	}
-	// }
 
 	if (possibleTeams.length > 0) {
 		return {
