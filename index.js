@@ -1,5 +1,6 @@
 //'use strict';
 const puppeteer = require("puppeteer");
+const Table = require("easy-table");
 
 const splinterlandsPage = require("./splinterlandsPage");
 const user = require("./user");
@@ -15,6 +16,7 @@ const {
 const quests = require("./quests");
 const ask = require("./possibleTeams");
 const chalk = require("chalk");
+const findCardById = require("./findCardById");
 
 let isMultiAccountMode = false;
 let account = "";
@@ -317,6 +319,39 @@ async function clickCreateTeamButton(page) {
 		});
 
 	return clicked;
+}
+
+async function logGame(teamToPlay, matchDetails) {
+	const gameTable = new Table();
+
+	gameTable.cell("Mana", matchDetails.mana);
+	gameTable.cell("Ruleset", matchDetails.rules);
+	gameTable.cell("Win Rate", teamToPlay.cards[8]);
+	gameTable.cell("Sample Size", teamToPlay.cards[9]);
+	gameTable.newRow();
+
+	const teamTable = new Table();
+	let teamData = [];
+
+	for (let i = 0; i < 7; i++) {
+		if (teamToPlay.cards[i]) {
+			let card = await findCardById(teamToPlay.cards[i]);
+			teamData.push(card);
+		} else {
+			break;
+		}
+	}
+
+	for (let i = 0; i < teamData.length; i++) {
+		teamTable.cell("Card", i === 0 ? "Summoner" : `Monster #${i}`);
+		teamTable.cell("ID", teamData[i].id);
+		teamTable.cell("Name", teamData[i].name);
+		teamTable.cell("Splinter", teamData[i].color);
+		teamTable.newRow();
+	}
+
+	console.log("\n", gameTable.toString());
+	console.log(teamTable.toString());
 }
 
 async function clickCards(page, teamToPlay, matchDetails) {
@@ -754,6 +789,9 @@ async function startBotPlayMatch(page, browser) {
 			matchDetails,
 			quest
 		);
+
+		logGame(teamToPlay, matchDetails);
+
 		let startFight = false;
 		if (teamToPlay) {
 			startFight = await clickCreateTeamButton(page);
