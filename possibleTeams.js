@@ -5,20 +5,20 @@ const summoners = {
 	260: "fire",
 	257: "water",
 	437: "water",
-	// 224: "dragon",
-	189: "earth",
-	145: "death",
+	// 224: "dragon", drake
+	// 189: "earth", wizard of eastwood
+	// 145: "death", contessa l'ament
 	240: "dragon",
-	167: "fire",
+	// 167: "fire",  pyre
 	438: "death",
-	156: "life",
+	// 156: "life", mother khala
 	440: "fire",
 	114: "dragon",
 	441: "life",
 	439: "earth",
 	262: "dragon",
 	261: "life",
-	178: "water",
+	// 178: "water",  bortus
 	258: "death",
 	27: "earth",
 	38: "life",
