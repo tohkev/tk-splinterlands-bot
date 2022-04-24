@@ -33,12 +33,6 @@ async function getCards() {
 	return myCards;
 }
 
-// LOAD RENTED CARDS AS PREFERRED
-async function getPreferredCards() {
-	const myPreferredCards = await user.getRentedCards(account);
-	return myPreferredCards;
-}
-
 async function getQuest() {
 	return quests
 		.getPlayerQuest(account)
@@ -51,7 +45,6 @@ async function getQuest() {
 }
 
 async function closePopups(page) {
-	console.log("check if any modal needs to be closed...");
 	if (await clickOnElement(page, ".close", 4000)) return;
 	await clickOnElement(page, ".modal-close-new", 1000, 2000);
 	await clickOnElement(page, ".modal-close", 4000, 2000);
@@ -87,14 +80,14 @@ async function findSeekingEnemyModal(page, visibleTimeout = 10000) {
         2: modal #find_opponent_dialog has appeared and closed
     */
 
-	console.log("check #find_opponent_dialog modal visibility");
+	// console.log("check #find_opponent_dialog modal visibility");
 	findOpponentDialogStatus = await page
 		.waitForSelector("#find_opponent_dialog", {
 			timeout: visibleTimeout,
 			visible: true,
 		})
 		.then(() => {
-			console.log("find_opponent_dialog visible");
+			// console.log("find_opponent_dialog visible");
 			return 1;
 		})
 		.catch((e) => {
@@ -103,14 +96,13 @@ async function findSeekingEnemyModal(page, visibleTimeout = 10000) {
 		});
 
 	if (findOpponentDialogStatus === 1) {
-		console.log("waiting for an opponent...");
 		findOpponentDialogStatus = await page
 			.waitForSelector("#find_opponent_dialog", {
 				timeout: 50000,
 				hidden: true,
 			})
 			.then(() => {
-				console.log("find_opponent_dialog has closed");
+				// console.log("find_opponent_dialog has closed");
 				return 2;
 			})
 			.catch(async (e) => {
@@ -128,7 +120,7 @@ async function findCreateTeamButton(
 	findOpponentDialogStatus = 0,
 	btnCreateTeamTimeout = 5000
 ) {
-	console.log(`waiting for create team button`);
+	// console.log(`waiting for create team button`);
 	return await page
 		.waitForSelector(".btn--create-team", { timeout: btnCreateTeamTimeout })
 		.then(() => {
@@ -156,14 +148,14 @@ async function launchBattle(page) {
 	while (!isStartBattleSuccess && retriesNum <= maxRetries) {
 		console.log(`Launch battle iter-[${retriesNum}]`);
 		if (findOpponentDialogStatus === 0) {
-			console.log("waiting for battle button");
+			// console.log("waiting for battle button");
 			isStartBattleSuccess = await page
 				.waitForXPath("//button[contains(., 'BATTLE')]", {
 					timeout: 20000,
 				})
 				.then((button) => {
 					button.click();
-					console.log("Battle button clicked");
+					// console.log("Battle button clicked");
 					return true;
 				})
 				.catch(() => {
@@ -217,7 +209,7 @@ async function clickSummonerCard(page, teamToPlay) {
 		})
 		.then((card) => {
 			card.click();
-			console.log(chalk.bold.greenBright(teamToPlay.summoner, "clicked"));
+			// console.log(chalk.bold.greenBright(teamToPlay.summoner, "clicked"));
 		})
 		.catch(() => {
 			clicked = false;
@@ -239,7 +231,7 @@ async function clickFilterElement(page, teamToPlay, matchDetails) {
 			visible: true,
 			timeout: 10000,
 		})
-		.then(() => console.log("filter element visible"))
+		// .then(() => console.log("filter element visible"))
 		.catch(() => console.log("filter element not visible"));
 
 	await page
@@ -248,7 +240,7 @@ async function clickFilterElement(page, teamToPlay, matchDetails) {
 		})
 		.then((selector) => {
 			selector.click();
-			console.log(chalk.bold.greenBright("filter element clicked"));
+			// console.log(chalk.bold.greenBright("filter element clicked"));
 		})
 		.catch(() => {
 			console.log(chalk.bold.redBright("filter element not clicked"));
@@ -273,7 +265,7 @@ async function clickMembersCard(page, teamToPlay) {
 	let clicked = true;
 
 	for (i = 1; i <= 6; i++) {
-		console.log("play: ", teamToPlay.cards[i].toString());
+		// console.log("play: ", teamToPlay.cards[i].toString());
 		if (teamToPlay.cards[i]) {
 			await page
 				.waitForXPath(
@@ -284,9 +276,9 @@ async function clickMembersCard(page, teamToPlay) {
 				)
 				.then((card) => {
 					card.click();
-					console.log(
-						chalk.bold.greenBright(teamToPlay.cards[i], "clicked")
-					);
+					// console.log(
+					// 	chalk.bold.greenBright(teamToPlay.cards[i], "clicked")
+					// );
 				})
 				.catch(() => {
 					clicked = false;
@@ -295,8 +287,6 @@ async function clickMembersCard(page, teamToPlay) {
 					);
 				});
 			if (!clicked) break;
-		} else {
-			console.log("nocard ", i);
 		}
 		await page.waitForTimeout(1000);
 	}
@@ -311,7 +301,6 @@ async function clickCreateTeamButton(page) {
 		.waitForSelector(".btn--create-team", { timeout: 10000 })
 		.then((e) => {
 			e.click();
-			console.log("btn--create-team clicked");
 		})
 		.catch(() => {
 			clicked = false;
@@ -397,11 +386,11 @@ async function clickCards(page, teamToPlay, matchDetails) {
 async function findBattleResultsModal(page) {
 	let isBattleResultVisible = false;
 
-	console.log("check div.battle-results modal visibility");
+	// console.log("check div.battle-results modal visibility");
 	isBattleResultVisible = await page
 		.waitForSelector("div.battle-results", { timeout: 5000, visible: true })
 		.then(() => {
-			console.log("battle results visible");
+			// console.log("battle results visible");
 			return true;
 		})
 		.catch(() => {
@@ -457,14 +446,13 @@ async function commenceBattle(page) {
     */
 	let btnRumbleTimeout = 20000;
 
-	console.log("check #wait_for_opponent_dialog modal visibility");
 	waitForOpponentDialogStatus = await page
 		.waitForSelector("#wait_for_opponent_dialog", {
 			timeout: 10000,
 			visible: true,
 		})
 		.then(() => {
-			console.log("wait_for_opponent_dialog visible");
+			// console.log("wait_for_opponent_dialog visible");
 			return 1;
 		})
 		.catch(() => {
@@ -479,7 +467,7 @@ async function commenceBattle(page) {
 				hidden: true,
 			})
 			.then(() => {
-				console.log("wait_for_opponent_dialog has closed");
+				// console.log("wait_for_opponent_dialog has closed");
 				btnRumbleTimeout = 5000;
 			})
 			.catch((e) => console.log(e.message));
@@ -489,7 +477,7 @@ async function commenceBattle(page) {
 	const isBtnRumbleVisible = await page
 		.waitForSelector("#btnRumble", { timeout: btnRumbleTimeout })
 		.then(() => {
-			console.log("btnRumble visible");
+			// console.log("btnRumble visible");
 			return true;
 		})
 		.catch(() => {
@@ -503,15 +491,15 @@ async function commenceBattle(page) {
 	await page.waitForTimeout(5000);
 	await page
 		.$eval("#btnRumble", (elem) => elem.click())
-		.then(() => console.log("btnRumble clicked"))
+		// .then(() => console.log("btnRumble clicked"))
 		.catch(() => console.log("btnRumble didnt click")); //start rumble
 	await page
 		.waitForSelector("#btnSkip", { timeout: 10000 })
-		.then(() => console.log("btnSkip visible"))
+		// .then(() => console.log("btnSkip visible"))
 		.catch(() => console.log("btnSkip not visible"));
 	await page
 		.$eval("#btnSkip", (elem) => elem.click())
-		.then(() => console.log("btnSkip clicked"))
+		// .then(() => console.log("btnSkip clicked"))
 		.catch(() => console.log("btnSkip not visible")); //skip rumble
 	await page.waitForTimeout(5000);
 
@@ -541,7 +529,7 @@ async function startBotPlayMatch(page, browser) {
 			.catch(() => console.log("Already logged in"));
 
 		if (item != undefined) {
-			console.log("Login attempt...");
+			// console.log("Login attempt...");
 			await splinterlandsPage
 				.login(page, account, password)
 				.catch((e) => {
@@ -608,7 +596,6 @@ async function startBotPlayMatch(page, browser) {
 			throw new Error(`Restart needed.`);
 		}
 
-		console.log("getting user quest info from splinterlands API...");
 		const quest = await getQuest();
 		if (!quest) {
 			console.log(
@@ -635,21 +622,8 @@ async function startBotPlayMatch(page, browser) {
 			}
 		}
 
-		console.log("getting user cards collection from splinterlands API...");
 		const myCards = await getCards()
 			.then((x) => {
-				console.log("cards retrieved:", x?.length);
-				return x;
-			})
-			.catch(() =>
-				console.log(
-					"cards collection api didnt respond. Did you use username? avoid email!"
-				)
-			);
-
-		const myPreferredCards = await getPreferredCards()
-			.then((x) => {
-				console.log("delegated cards size:", x?.length, x);
 				return x;
 			})
 			.catch(() =>
@@ -749,7 +723,6 @@ async function startBotPlayMatch(page, browser) {
 			rules: rules,
 			splinters: splinters,
 			myCards: myCards,
-			preferredCards: myPreferredCards,
 		};
 		await page.waitForTimeout(2000);
 		let possibleTeams = await ask
@@ -758,6 +731,7 @@ async function startBotPlayMatch(page, browser) {
 				console.log("Error from possible team API call: ", e)
 			);
 
+		//potential solution if not enough teams
 		// while (!possibleTeams || (possibleTeams.length < 3 && mana >= 13)) {
 		// 	mana--;
 		// 	console.log("Not enough teams, getting more..");
@@ -774,10 +748,7 @@ async function startBotPlayMatch(page, browser) {
 		// }
 
 		if (possibleTeams && possibleTeams.length) {
-			console.log(
-				"Possible Teams based on your cards: ",
-				possibleTeams.length
-			);
+			console.log("Retrieved " + possibleTeams.length + " teams.");
 		} else {
 			console.log("Error:", matchDetails, possibleTeams);
 			throw new Error("NO TEAMS available to be played");
@@ -829,17 +800,17 @@ async function startBotPlayMatch(page, browser) {
 		await page.waitForTimeout(5000);
 		await page
 			.waitForSelector(".btn-green", { timeout: 1000 })
-			.then(() => console.log("btn-green visible"))
+			// .then(() => console.log("btn-green visible"))
 			.catch(() => console.log("btn-green not visible"));
 		await page
 			.$eval(".btn-green", (elem) => elem.click())
-			.then(() => console.log("btn-green clicked"))
+			// .then(() => console.log("btn-green clicked"))
 			.catch(async () => {
 				console.log("Start Fight didnt work, waiting 5 sec and retry");
 				await page.waitForTimeout(5000);
 				await page
 					.$eval(".btn-green", (elem) => elem.click())
-					.then(() => console.log("btn-green clicked"))
+					// .then(() => console.log("btn-green clicked"))
 					.catch(() => {
 						startFight = false;
 						console.log(
@@ -911,20 +882,6 @@ async function run() {
 	//const page = await browser.newPage();
 	let [page] = await browser.pages();
 
-	// NOT WORKING on ALL the machines
-	// await page.setRequestInterception(true);
-	// page.on('request', (interceptedRequest) => {
-	//     //    console.log("URL: " + interceptedRequest.url())
-	//     //            page.on('request', (request) => {
-	//         // BLOCK CERTAIN DOMAINS
-	//         if (blockedResources.some(resource => interceptedRequest.url().includes(resource))){
-	//     //        console.log("Blocked: " + interceptedRequest.url());
-	//             interceptedRequest.abort();
-	//         // ALLOW OTHER REQUESTS
-	//         } else {
-	//             interceptedRequest.continue();
-	//     }
-	//       });
 	await page.setDefaultNavigationTimeout(500000);
 	await page.on("dialog", async (dialog) => {
 		await dialog.accept();
@@ -942,11 +899,6 @@ async function run() {
 	page.favouriteDeck = process.env.FAVOURITE_DECK || "";
 	while (start) {
 		console.log("Recover Status: ", page.recoverStatus);
-		// if (!process.env.API) {
-		// 	console.log(chalk.bold.redBright.bgBlack("Dont pay scammers!"));
-		// 	console.log(chalk.bold.whiteBright.bgBlack("text"));
-		// 	console.log(chalk.bold.greenBright.bgBlack("text"));
-		// }
 		await startBotPlayMatch(page, browser)
 			.then(async () => {
 				console.log("Closing battle", new Date().toLocaleString());
