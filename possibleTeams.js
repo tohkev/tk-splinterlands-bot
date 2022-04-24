@@ -114,7 +114,7 @@ const teamSelection = async (possibleTeams, matchDetails, quest) => {
 	//CHECK FOR QUEST:
 	if (
 		priorityToTheQuest &&
-		possibleTeams.length > 10 &&
+		possibleTeams.length > 1 &&
 		quest &&
 		quest.total
 	) {
@@ -146,9 +146,7 @@ const teamSelection = async (possibleTeams, matchDetails, quest) => {
 				cards: filteredTeamsForQuest[0],
 			};
 		} else {
-			console.log(
-				"quest already completed or not enough teams for the quest"
-			);
+			console.log("Quest may be already completed.");
 			return {
 				summoner: possibleTeams[0][0],
 				cards: possibleTeams[0],
