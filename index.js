@@ -80,14 +80,12 @@ async function findSeekingEnemyModal(page, visibleTimeout = 10000) {
         2: modal #find_opponent_dialog has appeared and closed
     */
 
-	// console.log("check #find_opponent_dialog modal visibility");
 	findOpponentDialogStatus = await page
 		.waitForSelector("#find_opponent_dialog", {
 			timeout: visibleTimeout,
 			visible: true,
 		})
 		.then(() => {
-			// console.log("find_opponent_dialog visible");
 			return 1;
 		})
 		.catch((e) => {
@@ -102,7 +100,6 @@ async function findSeekingEnemyModal(page, visibleTimeout = 10000) {
 				hidden: true,
 			})
 			.then(() => {
-				// console.log("find_opponent_dialog has closed");
 				return 2;
 			})
 			.catch(async (e) => {
@@ -120,7 +117,6 @@ async function findCreateTeamButton(
 	findOpponentDialogStatus = 0,
 	btnCreateTeamTimeout = 5000
 ) {
-	// console.log(`waiting for create team button`);
 	return await page
 		.waitForSelector(".btn--create-team", { timeout: btnCreateTeamTimeout })
 		.then(() => {
@@ -148,14 +144,12 @@ async function launchBattle(page) {
 	while (!isStartBattleSuccess && retriesNum <= maxRetries) {
 		console.log(`Launch battle iter-[${retriesNum}]`);
 		if (findOpponentDialogStatus === 0) {
-			// console.log("waiting for battle button");
 			isStartBattleSuccess = await page
 				.waitForXPath("//button[contains(., 'BATTLE')]", {
 					timeout: 20000,
 				})
 				.then((button) => {
 					button.click();
-					// console.log("Battle button clicked");
 					return true;
 				})
 				.catch(() => {
@@ -209,7 +203,6 @@ async function clickSummonerCard(page, teamToPlay) {
 		})
 		.then((card) => {
 			card.click();
-			// console.log(chalk.bold.greenBright(teamToPlay.summoner, "clicked"));
 		})
 		.catch(() => {
 			clicked = false;
@@ -240,7 +233,6 @@ async function clickFilterElement(page, teamToPlay, matchDetails) {
 		})
 		.then((selector) => {
 			selector.click();
-			// console.log(chalk.bold.greenBright("filter element clicked"));
 		})
 		.catch(() => {
 			console.log(chalk.bold.redBright("filter element not clicked"));
@@ -265,7 +257,6 @@ async function clickMembersCard(page, teamToPlay) {
 	let clicked = true;
 
 	for (i = 1; i <= 6; i++) {
-		// console.log("play: ", teamToPlay.cards[i].toString());
 		if (teamToPlay.cards[i]) {
 			await page
 				.waitForXPath(
@@ -276,9 +267,6 @@ async function clickMembersCard(page, teamToPlay) {
 				)
 				.then((card) => {
 					card.click();
-					// console.log(
-					// 	chalk.bold.greenBright(teamToPlay.cards[i], "clicked")
-					// );
 				})
 				.catch(() => {
 					clicked = false;
@@ -386,11 +374,9 @@ async function clickCards(page, teamToPlay, matchDetails) {
 async function findBattleResultsModal(page) {
 	let isBattleResultVisible = false;
 
-	// console.log("check div.battle-results modal visibility");
 	isBattleResultVisible = await page
 		.waitForSelector("div.battle-results", { timeout: 5000, visible: true })
 		.then(() => {
-			// console.log("battle results visible");
 			return true;
 		})
 		.catch(() => {
@@ -452,7 +438,6 @@ async function commenceBattle(page) {
 			visible: true,
 		})
 		.then(() => {
-			// console.log("wait_for_opponent_dialog visible");
 			return 1;
 		})
 		.catch(() => {
@@ -467,7 +452,6 @@ async function commenceBattle(page) {
 				hidden: true,
 			})
 			.then(() => {
-				// console.log("wait_for_opponent_dialog has closed");
 				btnRumbleTimeout = 5000;
 			})
 			.catch((e) => console.log(e.message));
@@ -477,7 +461,6 @@ async function commenceBattle(page) {
 	const isBtnRumbleVisible = await page
 		.waitForSelector("#btnRumble", { timeout: btnRumbleTimeout })
 		.then(() => {
-			// console.log("btnRumble visible");
 			return true;
 		})
 		.catch(() => {
@@ -529,7 +512,6 @@ async function startBotPlayMatch(page, browser) {
 			.catch(() => console.log("Already logged in"));
 
 		if (item != undefined) {
-			// console.log("Login attempt...");
 			await splinterlandsPage
 				.login(page, account, password)
 				.catch((e) => {
