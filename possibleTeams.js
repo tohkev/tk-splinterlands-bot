@@ -146,7 +146,7 @@ const teamSelection = async (possibleTeams, matchDetails, quest) => {
 				cards: filteredTeamsForQuest[0],
 			};
 		} else {
-			console.log("Quest may be already completed.");
+			console.log("Not considering quest..");
 			return {
 				summoner: possibleTeams[0][0],
 				cards: possibleTeams[0],
