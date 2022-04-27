@@ -3,6 +3,9 @@ const { run, setupAccount } = require("./index");
 const { sleep } = require("./helper");
 const chalk = require("chalk");
 const log = require("fancy-log");
+const util = require("util");
+
+util.inspect.styles.date = "white";
 
 const isMultiAccountMode =
 	process.env.MULTI_ACCOUNT?.toLowerCase() === "true" ? true : false;
