@@ -1,5 +1,6 @@
 require("dotenv").config();
 const fetch = require("node-fetch");
+const log = require("fancy-log");
 
 const summoners = {
 	260: "fire",
@@ -94,22 +95,22 @@ const getBattlesWithRuleset = (ruleset, mana, splinters, player) => {
 			summoners ? JSON.stringify(summoners) : ""
 		}`;
 
-		console.log("API call: ", host + url);
+		log("API call: ", host + url);
 		return fetch(host + url, { timeout: 10000 })
 			.then((x) => x && x.json())
 			.then((data) => {
 				return convertBattlesToArray(data.teams);
 			})
-			.catch((e) => console.log("fetch ", e));
+			.catch((e) => log("fetch ", e));
 	} catch (e) {
-		console.log(e);
+		log(e);
 	}
 };
 
 const teamSelection = async (possibleTeams, matchDetails, quest) => {
 	let priorityToTheQuest =
 		process.env.QUEST_PRIORITY === "false" ? false : true;
-	console.log("quest custom option set as:", priorityToTheQuest);
+	log("quest custom option set as:", priorityToTheQuest);
 
 	//CHECK FOR QUEST:
 	if (
@@ -124,10 +125,8 @@ const teamSelection = async (possibleTeams, matchDetails, quest) => {
 		const filteredTeamsForQuest = possibleTeams.filter(
 			(team) => team[7] === quest.splinter
 		);
-		console.log(
-			left + " battles left for the " + quest.splinter + " quest"
-		);
-		console.log("play for the quest ", quest.splinter, "? ", questCheck);
+		log(left + " battles left for the " + quest.splinter + " quest");
+		log("play for the quest ", quest.splinter, "? ", questCheck);
 
 		if (
 			left > 0 &&
@@ -135,7 +134,7 @@ const teamSelection = async (possibleTeams, matchDetails, quest) => {
 			questCheck &&
 			filteredTeamsForQuest[0][8]
 		) {
-			console.log(
+			log(
 				"PLAY for the quest with Teams choice of size: ",
 				filteredTeamsForQuest.length,
 				"PLAY this: ",
@@ -146,7 +145,7 @@ const teamSelection = async (possibleTeams, matchDetails, quest) => {
 				cards: filteredTeamsForQuest[0],
 			};
 		} else {
-			console.log("Not considering quest..");
+			log("Not considering quest..");
 			return {
 				summoner: possibleTeams[0][0],
 				cards: possibleTeams[0],
@@ -161,7 +160,7 @@ const teamSelection = async (possibleTeams, matchDetails, quest) => {
 		};
 	}
 
-	console.log("No available team to be played...");
+	log("No available team to be played...");
 	return null;
 };
 

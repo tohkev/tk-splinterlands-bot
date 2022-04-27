@@ -2,6 +2,7 @@ require("dotenv").config();
 const { run, setupAccount } = require("./index");
 const { sleep } = require("./helper");
 const chalk = require("chalk");
+const log = require("fancy-log");
 
 const isMultiAccountMode =
 	process.env.MULTI_ACCOUNT?.toLowerCase() === "true" ? true : false;
@@ -20,7 +21,7 @@ async function startMulti() {
 	// split @ to prevent email use
 	accounts = accounts.map((e) => e.split("@")[0]);
 	// accounts count
-	console.log(
+	log(
 		chalk.bold.redBright(
 			`Accounts count: ${accounts.length}, passwords count: ${passwords.length}`
 		)
@@ -37,10 +38,10 @@ async function startMulti() {
 		);
 	}
 
-	console.log(chalk.bold.white("List of accounts to run:"));
+	log(chalk.bold.white("List of accounts to run:"));
 	for (let i = 0; i < accounts.length; i++) {
 		let msg = "This account";
-		console.log(chalk.bold.whiteBright(`${i + 1}. ${accounts[i]}`));
+		log(chalk.bold.whiteBright(`${i + 1}. ${accounts[i]}`));
 
 		if (accounts[i].length === 0 && passwords[i].length === 0) {
 			missingValue = true;
@@ -54,27 +55,25 @@ async function startMulti() {
 		} else {
 			msg += " has all the required values.";
 		}
-		console.log(msg);
+		log(msg);
 	}
 
 	if (missingValue)
 		throw new Error("Fix your ACCOUNT and/or PASSWORD value in .env file.");
 
 	while (true) {
-		console.log(
-			chalk.bold.whiteBright.bgGreen(`Running bot iter-[${count}]`)
-		);
+		log(chalk.bold.whiteBright.bgGreen(`Running bot iter-[${count}]`));
 		for (let i = 0; i < accounts.length; i++) {
 			setupAccount(accounts[i], passwords[i], isMultiAccountMode);
 			try {
 				await run();
 			} catch (e) {
-				console.log("Error on main:", e);
+				log("Error on main:", e);
 			}
 
-			console.log(`Finished running ${accounts[i]} account...\n`);
+			log(`Finished running ${accounts[i]} account...\n`);
 		}
-		console.log(
+		log(
 			"waiting for the next battle in",
 			sleepingTime / 1000 / 60,
 			"minutes at",
@@ -105,12 +104,12 @@ async function startSingle() {
 }
 
 (async () => {
-	console.log(`isMultiAccountMode: ${isMultiAccountMode}`);
+	log(`isMultiAccountMode: ${isMultiAccountMode}`);
 	if (isMultiAccountMode) {
-		console.log("Running mode: multi");
+		log("Running mode: multi");
 		await startMulti();
 	} else {
-		console.log("Running mode: single");
+		log("Running mode: single");
 		await startSingle();
 	}
 })();

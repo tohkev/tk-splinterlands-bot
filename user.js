@@ -1,6 +1,7 @@
 const fetch = require("node-fetch");
 const basicCards = require("./data/basicCards"); //phantom cards available for the players but not visible in the api endpoint
 const moment = require("moment");
+const log = require("fancy-log");
 
 const isPlayable = (username, card) => {
 	if (
@@ -62,7 +63,7 @@ getPlayerCards = (username) =>
 		)
 		.then((advanced) => basicCards.concat(advanced))
 		.catch((e) => {
-			console.log(
+			log(
 				"Error: game-api.splinterlands did not respond trying api.slinterlands... "
 			);
 			fetch(`https://api.splinterlands.io/cards/collection/${username}`, {
@@ -86,7 +87,7 @@ getPlayerCards = (username) =>
 				)
 				.then((advanced) => basicCards.concat(advanced))
 				.catch((e) => {
-					console.log(
+					log(
 						"Using only basic cards due to error when getting user collection from splinterlands: ",
 						e
 					);
@@ -113,7 +114,7 @@ getRentedCards = (username) =>
 				: ""
 		)
 		.catch((e) => {
-			console.log(
+			log(
 				"Error: game-api.splinterlands did not respond trying api.splinterlands... "
 			);
 			fetch(`https://api.splinterlands.io/cards/collection/${username}`, {
@@ -137,7 +138,7 @@ getRentedCards = (username) =>
 				)
 				.then((advanced) => basicCards.concat(advanced))
 				.catch((e) => {
-					console.log(
+					log(
 						"Using only basic cards due to error when getting user collection from splinterlands: ",
 						e
 					);

@@ -1,4 +1,5 @@
 const card = require("./cards");
+const log = require("fancy-log");
 
 const validDecks = ["Red", "Blue", "White", "Black", "Green"];
 const colorToDeck = {
@@ -15,7 +16,7 @@ const deckValidColor = (accumulator, currentValue) =>
 		: accumulator;
 
 const reload = async (page) => {
-	console.log("reloading page...");
+	log("reloading page...");
 	await page.reload();
 };
 
@@ -59,7 +60,7 @@ const getElementTextByXpath = async (page, selector, timeout = 20000) => {
 		const text = await element.evaluate((el) => el.textContent);
 		return text;
 	} catch (e) {
-		console.log("Get text by xpath error.", e);
+		log("Get text by xpath error.", e);
 		return false;
 	}
 };

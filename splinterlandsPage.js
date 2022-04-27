@@ -1,3 +1,5 @@
+const log = require("fancy-log");
+
 async function login(page, account, password) {
 	try {
 		page.waitForSelector("#log_in_button > button").then(() =>
@@ -25,10 +27,10 @@ async function login(page, account, password) {
 						timeout: 3000,
 					})
 					.then(() => {
-						console.log("logged in!");
+						log("logged in!");
 					})
 					.catch(() => {
-						console.log("didnt login");
+						log("didnt login");
 						throw new Error("Didnt login");
 					});
 			})
@@ -52,7 +54,7 @@ async function checkMana(page) {
 		var manaLeft = manaCap - manaUsed;
 		return { manaCap, manaUsed, manaLeft };
 	});
-	console.log("manaLimit", manas);
+	log("manaLimit", manas);
 	return manas;
 }
 
