@@ -26,12 +26,19 @@ Once you have installed NodeJS and prepared the .env file, open the command line
 ### Configuration:
 
 `MINUTES_BATTLES_INTERVAL` - This controls the interval between games (in minutes) the bot will play games.
+
 `QUEST_PRIORITY` - If 'true', the bot will prioritize teams adhering to the quest (currently on working on splinter quests).
+
 `CLAIM_SEASON_REWARD` - If 'true', the bot will automatically collect your season rewards if available.
+
 `CLAIM_DAILY_QUEST_REWARD` - If 'true', the bot will automatically collect your completed quest rewards if available.
+
 `HEADLESS` - If 'true', the bot will run in the background (no GUI).
+
 `ECR_STOP_LIMIT` - This tells the bot not to play a game when ECR is above a specified limit (in percentage).
+
 `ECR_RECOVER_TO` - This tells the bot when to continue playing when ECR has reached a specified amount (in percentage).
+
 `SKIP_QUEST` - This allows the bot to re-roll your current quest if you have a specified quest (life, snipe, etc).
 
 Example:
