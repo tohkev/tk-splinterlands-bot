@@ -731,7 +731,6 @@ async function startBotPlayMatch(page, browser) {
 		if (possibleTeams && possibleTeams.length) {
 			log("Retrieved " + possibleTeams.length + " teams.");
 		} else {
-			log("Error:", matchDetails, possibleTeams);
 			throw new Error("NO TEAMS available to be played");
 		}
 
@@ -801,10 +800,7 @@ async function startBotPlayMatch(page, browser) {
 		if (startFight) await commenceBattle(page);
 		else await findBattleResultsModal(page);
 	} catch (e) {
-		log(
-			"Error handling browser not opened, internet connection issues, or battle cannot start:",
-			e
-		);
+		log("No teams found, skipping game..");
 	}
 }
 
