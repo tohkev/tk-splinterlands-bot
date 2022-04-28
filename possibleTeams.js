@@ -93,7 +93,7 @@ const getBattlesWithRuleset = (ruleset, mana, splinters, player) => {
 		const host = process.env.API || "http://localhost:5000/";
 		const url = `getteams?ruleset=${rulesetEncoded}&mana=${mana}&player=${player}&summoners=${
 			summoners ? JSON.stringify(summoners) : ""
-		}`;
+		}&gladius=false`;
 
 		log("API call: ", host + url);
 		return fetch(host + url, { timeout: 10000 })
@@ -134,12 +134,7 @@ const teamSelection = async (possibleTeams, matchDetails, quest) => {
 			questCheck &&
 			filteredTeamsForQuest[0][8]
 		) {
-			log(
-				"PLAY for the quest with Teams choice of size: ",
-				filteredTeamsForQuest.length,
-				"PLAY this: ",
-				filteredTeamsForQuest[0]
-			);
+			log("Playing for quest..");
 			return {
 				summoner: filteredTeamsForQuest[0][0],
 				cards: filteredTeamsForQuest[0],
