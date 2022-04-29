@@ -1,6 +1,6 @@
 {
-  "name": "splinterlands-bot",
-  "version": "1.11.0",
+  "name": "tk-splinterlands-bot",
+  "version": "1.0",
   "description": "",
   "main": "main.js",
   "engines": {
