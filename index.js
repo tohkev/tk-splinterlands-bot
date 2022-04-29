@@ -712,26 +712,21 @@ async function startBotPlayMatch(page, browser) {
 			.getBattlesWithRuleset(rules, mana, splinters, account)
 			.catch((e) => log("Error from possible team API call: ", e));
 
-		//potential solution if not enough teams
-		// while (!possibleTeams || (possibleTeams.length < 3 && mana >= 13)) {
-		// 	mana--;
-		// 	console.log("Not enough teams, getting more..");
-		// 	let newPossibleTeams = await ask
-		// 		.getBattlesWithRuleset(rules, mana, splinters, account)
-		// 		.catch((e) =>
-		// 			console.log("Error from possible team API call: ", e)
-		// 		);
-		// 	if (!possibleTeams) {
-		// 		possibleTeams = newPossibleTeams;
-		// 	} else if (newPossibleTeams && newPossibleTeams.length > 1) {
-		// 		possibleTeams.concat(newPossibleTeams);
-		// 	}
-		// }
+		if (!possibleTeams || possibleTeams.length === 0) {
+			log(
+				chalk.bold.redBright(
+					"No team found. 2nd attempt to find team.."
+				)
+			);
+			possibleTeams = await ask
+				.getBattlesGeneral(mana, splinters, account)
+				.catch((e) => log("Error from last resort API call: ", e));
+		}
 
 		if (possibleTeams && possibleTeams.length) {
 			log("Retrieved " + possibleTeams.length + " teams.");
 		} else {
-			throw new Error("NO TEAMS available to be played");
+			throw new Error("No teams available to be played");
 		}
 
 		//TEAM SELECTION
@@ -800,7 +795,7 @@ async function startBotPlayMatch(page, browser) {
 		if (startFight) await commenceBattle(page);
 		else await findBattleResultsModal(page);
 	} catch (e) {
-		log("No teams found, skipping game..");
+		log(chalk.bold.redBright("No teams found, skipping game.."));
 	}
 }
 

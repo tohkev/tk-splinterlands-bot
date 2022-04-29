@@ -95,7 +95,27 @@ const getBattlesWithRuleset = (ruleset, mana, splinters, player) => {
 			summoners ? JSON.stringify(summoners) : ""
 		}&gladius=false`;
 
-		log("API call: ", host + url);
+		// log("API call: ", host + url);
+		return fetch(host + url, { timeout: 10000 })
+			.then((x) => x && x.json())
+			.then((data) => {
+				return convertBattlesToArray(data.teams);
+			})
+			.catch((e) => log("fetch ", e));
+	} catch (e) {
+		log(e);
+	}
+};
+
+const getBattlesGeneral = (mana, splinters, player) => {
+	try {
+		const summoners = getSummonersFromSplinter(splinters);
+		const host = process.env.API || "http://localhost:5000/";
+		const url = `getteams?mana=${mana}&player=${player}&summoners=${
+			summoners ? JSON.stringify(summoners) : ""
+		}&gladius=false`;
+
+		// log("API call: ", host + url);
 		return fetch(host + url, { timeout: 10000 })
 			.then((x) => x && x.json())
 			.then((data) => {
@@ -162,3 +182,4 @@ const teamSelection = async (possibleTeams, matchDetails, quest) => {
 module.exports.getBattlesWithRuleset = getBattlesWithRuleset;
 module.exports.teamSelection = teamSelection;
 module.exports.getSummonersFromSplinter = getSummonersFromSplinter;
+module.exports.getBattlesGeneral = getBattlesGeneral;
