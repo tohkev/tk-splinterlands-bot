@@ -18,6 +18,7 @@ const quests = require("./quests");
 const ask = require("./possibleTeams");
 const chalk = require("chalk");
 const findCardById = require("./findCardById");
+const cardDatabase = require("./data/cardsDetails.json");
 
 let isMultiAccountMode = false;
 let account = "";
@@ -313,7 +314,11 @@ async function logGame(teamToPlay, matchDetails) {
 
 	for (let i = 0; i < 7; i++) {
 		if (teamToPlay.cards[i]) {
-			let card = await findCardById(teamToPlay.cards[i]);
+			//dynamically getting card info from API
+			// let card = await findCardById(teamToPlay.cards[i]);
+			let card = cardDatabase.find(
+				(card) => card.id === teamToPlay.cards[i]
+			);
 			teamData.push(card);
 		} else {
 			break;
