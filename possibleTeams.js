@@ -112,7 +112,7 @@ const getBattlesGeneral = (ruleset, mana, splinters, player) => {
 	try {
 		const summoners = getSummonersFromSplinter(splinters);
 		const host = process.env.API || "http://localhost:5000/";
-		const rulesetEncoded = "";
+		let rulesetEncoded = "";
 
 		const rulesSplit = ruleset.split("|");
 
