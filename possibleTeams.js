@@ -1,6 +1,7 @@
 require("dotenv").config();
 const fetch = require("node-fetch");
 const log = require("fancy-log");
+const isLimitingRule = require("./util/isLimitingRule.js");
 
 const summoners = {
 	260: "fire",
@@ -95,7 +96,7 @@ const getBattlesWithRuleset = (ruleset, mana, splinters, player) => {
 			summoners ? JSON.stringify(summoners) : ""
 		}&gladius=false`;
 
-		// log("API call: ", host + url);
+		log("API call: ", host + url);
 		return fetch(host + url, { timeout: 10000 })
 			.then((x) => x && x.json())
 			.then((data) => {
@@ -107,15 +108,25 @@ const getBattlesWithRuleset = (ruleset, mana, splinters, player) => {
 	}
 };
 
-const getBattlesGeneral = (mana, splinters, player) => {
+const getBattlesGeneral = (ruleset, mana, splinters, player) => {
 	try {
 		const summoners = getSummonersFromSplinter(splinters);
 		const host = process.env.API || "http://localhost:5000/";
-		const url = `getteams?mana=${mana}&player=${player}&summoners=${
+		const rulesetEncoded = "";
+
+		const rulesSplit = ruleset.split("|");
+
+		if (isLimitingRule.indexOf(rulesSplit[0]) > -1) {
+			rulesetEncoded = encodeURIComponent(rulesSplit[0]);
+		} else if (isLimitingRule.indexOf(rulesSplit[1]) > -1) {
+			rulesetEncoded = encodeURIComponent(rulesSplit[1]);
+		}
+
+		const url = `getteams?ruleset=${rulesetEncoded}&mana=${mana}&player=${player}&summoners=${
 			summoners ? JSON.stringify(summoners) : ""
 		}&gladius=false`;
 
-		// log("API call: ", host + url);
+		log("API call: ", host + url);
 		return fetch(host + url, { timeout: 10000 })
 			.then((x) => x && x.json())
 			.then((data) => {

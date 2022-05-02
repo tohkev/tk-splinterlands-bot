@@ -651,7 +651,7 @@ async function startBotPlayMatch(page, browser) {
 				await page.waitForTimeout(3000);
 				await page.reload();
 			} catch (e) {
-				console.info("no season reward to be claimed");
+				log.info("no season reward to be claimed");
 			}
 		}
 
@@ -678,7 +678,7 @@ async function startBotPlayMatch(page, browser) {
 						page.goto("https://splinterlands.com/?p=battle_history")
 					);
 			} catch (e) {
-				console.info(
+				log.info(
 					"no quest reward to be claimed waiting for the battle..."
 				);
 			}
@@ -724,7 +724,7 @@ async function startBotPlayMatch(page, browser) {
 				)
 			);
 			possibleTeams = await ask
-				.getBattlesGeneral(mana, splinters, account)
+				.getBattlesGeneral(rules, mana, splinters, account)
 				.catch((e) => log("Error from last resort API call: ", e));
 		}
 
@@ -836,17 +836,6 @@ let puppeteer_options = {
 if (executablePath) {
 	puppeteer_options["executablePath"] = executablePath;
 }
-
-const blockedResources = [
-	"splinterlands.com/players/item_details",
-	"splinterlands.com/players/event",
-	"splinterlands.com/market/for_sale_grouped",
-	"splinterlands.com/battle/history2",
-	"splinterlands.com/players/messages",
-	"facebook.com",
-	"google-analytics.com",
-	"twitter.com",
-];
 
 async function run() {
 	let start = true;
