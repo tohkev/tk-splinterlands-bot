@@ -57,11 +57,11 @@ Example:
 
 -   `ECR_RECOVER_TO=99`
 
--   `SKIP_QUEST=life,snipe,neutral`
+-   `SKIP_QUEST=life,dragon`
 
-### Running bot with multiaccount setting
+### Running the bot with multiple accounts
 
-in order to run multple accounts launching the script only once, you can simply add the list of usernames and posting keys in the .env file and set the variable `MULTI_ACCOUNT` as true:
+In order to run multiple accounts, list all your usernames and posting keys in the .env file and set the variable `MULTI_ACCOUNT` as true as shown below:
 
 -   `MULTI_ACCOUNT=true`
 -   `ACCOUNT=user1,user2,user,...`
