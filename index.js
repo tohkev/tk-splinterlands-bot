@@ -19,6 +19,7 @@ const ask = require("./possibleTeams");
 const chalk = require("chalk");
 const findCardById = require("./findCardById");
 const cardDatabase = require("./data/cardsDetails.json");
+const colorMap = require("./util/colorMap");
 
 let isMultiAccountMode = false;
 let account = "";
@@ -305,7 +306,10 @@ async function logGame(teamToPlay, matchDetails) {
 
 	gameTable.cell("Mana", matchDetails.mana);
 	gameTable.cell("Ruleset", matchDetails.rules);
-	gameTable.cell("Win Rate", teamToPlay.cards[8]);
+	gameTable.cell(
+		"Win Rate",
+		!teamToPlay.cards[8] ? "0%" : teamToPlay.cards[8] + "%"
+	);
 	gameTable.cell("Sample Size", teamToPlay.cards[9]);
 	gameTable.newRow();
 
@@ -329,7 +333,7 @@ async function logGame(teamToPlay, matchDetails) {
 		teamTable.cell("Card", i === 0 ? "Summoner" : `Monster #${i}`);
 		teamTable.cell("ID", teamData[i].id);
 		teamTable.cell("Name", teamData[i].name);
-		teamTable.cell("Splinter", teamData[i].color);
+		teamTable.cell("Splinter", colorMap[teamData[i].color]);
 		teamTable.newRow();
 	}
 
