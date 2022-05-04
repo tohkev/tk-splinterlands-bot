@@ -60,16 +60,16 @@ async function checkMana(page) {
 
 async function checkMatchMana(page) {
 	const mana = await page.$$eval(
-		"section.combat_info > div > div > div.mana-cap__icon",
-		(el) => el.map((x) => x.getAttribute("data-original-title"))
+		"div.mana-cap__icon > div.aspect-ratio--1-1 > div.aspect-ratio__content",
+		(el) => el.map((x) => x.innerText)
 	);
-	const manaValue = parseInt(mana[0].split(":")[1], 10);
+	const manaValue = parseInt(mana);
 	return manaValue;
 }
 
 async function checkMatchRules(page) {
 	const rules = await page.$$eval(
-		"div.combat__rules > div > div>  img",
+		"div.row > div > div.no-gutters > div > img.brawl-zoomable-obj",
 		(el) => el.map((x) => x.getAttribute("data-original-title"))
 	);
 	return rules.map((x) => x.split(":")[0]).join("|");
@@ -77,7 +77,7 @@ async function checkMatchRules(page) {
 
 async function checkMatchActiveSplinters(page) {
 	const splinterUrls = await page.$$eval(
-		"div.active_element_list > img",
+		"div > div.no-gutters > div > img",
 		(el) => el.map((x) => x.getAttribute("src"))
 	);
 	return splinterUrls
@@ -90,7 +90,7 @@ const splinterIsActive = (splinterUrl) => {
 		.split("/")
 		.slice(-1)[0]
 		.replace(".svg", "")
-		.replace("icon_splinter_", "");
+		.replace("btn_round_", "");
 	return splinter.indexOf("inactive") === -1 ? splinter : "";
 };
 
