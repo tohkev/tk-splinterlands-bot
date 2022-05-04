@@ -77,7 +77,7 @@ async function checkMatchRules(page) {
 
 async function checkMatchActiveSplinters(page) {
 	const splinterUrls = await page.$$eval(
-		"div > div.no-gutters > div > img",
+		"div.col-xs-3 > div > div.no-gutters > div > img",
 		(el) => el.map((x) => x.getAttribute("src"))
 	);
 	return splinterUrls
