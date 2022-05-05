@@ -187,7 +187,7 @@ async function clickCreateTeamButton(page) {
 	let clicked = true;
 
 	await page
-		.waitForSelector(".btn--create-team", { timeout: 10000 })
+		.waitForSelector("#create-team-btn", { timeout: 10000 })
 		.then((e) => {
 			e.click();
 		})
@@ -294,13 +294,7 @@ async function findBattleResultsModal(page) {
 			15000
 		);
 		if (winner.trim() == account) {
-			const decWon = await getElementText(
-				page,
-				".player.winner span.dec-reward span",
-				1000
-			);
-			log(chalk.green("You won! Reward: " + decWon + " DEC"));
-			totalDec += !isNaN(parseFloat(decWon)) ? parseFloat(decWon) : 0;
+			log(chalk.green("You win!"));
 			winTotal += 1;
 		} else {
 			log(chalk.red("You lost"));
@@ -311,7 +305,6 @@ async function findBattleResultsModal(page) {
 		undefinedTotal += 1;
 	}
 	await clickOnElement(page, ".btn--done", 20000, 10000);
-	await clickOnElement(page, "#menu_item_battle", 20000, 10000);
 
 	log(
 		"Total Battles: " +
@@ -320,7 +313,6 @@ async function findBattleResultsModal(page) {
 			chalk.yellow(" - Draw? Total: " + undefinedTotal) +
 			chalk.red(" - Lost Total: " + loseTotal)
 	);
-	log(chalk.green("Total Earned: " + totalDec + " DEC"));
 
 	return true;
 }
@@ -464,7 +456,6 @@ async function startBotPlayMatch(page, browser) {
 			mana: mana,
 			rules: rules,
 			splinters: splinters,
-			myCards: myCards,
 		};
 		await page.waitForTimeout(2000);
 		let possibleTeams = await ask
@@ -489,11 +480,7 @@ async function startBotPlayMatch(page, browser) {
 		}
 
 		//TEAM SELECTION
-		const teamToPlay = await ask.teamSelection(
-			possibleTeams,
-			matchDetails,
-			quest
-		);
+		const teamToPlay = await ask.teamSelection(possibleTeams, matchDetails);
 
 		logGame(teamToPlay, matchDetails);
 
