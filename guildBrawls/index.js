@@ -4,7 +4,7 @@ const Table = require("easy-table");
 const log = require("fancy-log");
 
 const splinterlandsPage = require("./splinterlandsPage");
-const card = require("./cards");
+const card = require("../cards");
 const {
 	clickOnElement,
 	getElementText,
@@ -12,19 +12,17 @@ const {
 	teamActualSplinterToPlay,
 	sleep,
 	reload,
-} = require("./helper");
-const ask = require("./possibleTeams");
+} = require("../helper");
+const ask = require("../possibleTeams");
 const chalk = require("chalk");
-const findCardById = require("./findCardById");
+const findCardById = require("../findCardById");
 
 let isMultiAccountMode = false;
 let account = "";
 let password = "";
-let totalDec = 0;
 let winTotal = 0;
 let loseTotal = 0;
 let undefinedTotal = 0;
-const ecrRecoveryRatePerHour = 1.04;
 
 async function closePopups(page) {
 	if (await clickOnElement(page, ".close", 4000)) return;
@@ -318,68 +316,44 @@ async function findBattleResultsModal(page) {
 }
 
 async function commenceBattle(page) {
-	let waitForOpponentDialogStatus = 0;
-	/*  waitForOpponentDialogStatus value list
-        0: modal #wait_for_opponent_dialog has not appeared
-        1: modal #wait_for_opponent_dialog has appeared and not closed
-    */
-	let btnRumbleTimeout = 20000;
+	await page.waitForTimeout(7000);
 
-	waitForOpponentDialogStatus = await page
-		.waitForSelector("#wait_for_opponent_dialog", {
-			timeout: 10000,
-			visible: true,
-		})
-		.then(() => {
-			return 1;
-		})
-		.catch(() => {
-			log("wait_for_opponent_dialog not visible");
-			return 0;
-		});
+	const battleStarted = (await page.$("#btnRumble")) || null;
 
-	if (waitForOpponentDialogStatus === 1) {
-		await page
-			.waitForSelector("#wait_for_opponent_dialog", {
-				timeout: 100000,
-				hidden: true,
-			})
+	if (battleStarted) {
+		const isBtnRumbleVisible = await page
+			.waitForSelector("#btnRumble", { timeout: 5000 })
 			.then(() => {
-				btnRumbleTimeout = 5000;
+				return true;
 			})
-			.catch((e) => log(e.message));
+			.catch(() => {
+				log("btnRumble not visible");
+				return false;
+			});
+		// if btnRumble not visible, check battle results modal in case the opponent surrendered
+		if (!isBtnRumbleVisible && (await findBattleResultsModal(page))) return;
+		else if (!isBtnRumbleVisible) return;
+
+		await page.waitForTimeout(5000);
+		await page
+			.$eval("#btnRumble", (elem) => elem.click())
+			// .then(() => console.log("btnRumble clicked"))
+			.catch(() => log("btnRumble didnt click")); //start rumble
+		await page
+			.waitForSelector("#btnSkip", { timeout: 10000 })
+			// .then(() => console.log("btnSkip visible"))
+			.catch(() => log("btnSkip not visible"));
+		await page
+			.$eval("#btnSkip", (elem) => elem.click())
+			// .then(() => console.log("btnSkip clicked"))
+			.catch(() => log("btnSkip not visible")); //skip rumble
+		await page.waitForTimeout(5000);
+
+		await findBattleResultsModal(page);
+	} else {
+		undefinedTotal++;
+		return;
 	}
-
-	await page.waitForTimeout(5000);
-	const isBtnRumbleVisible = await page
-		.waitForSelector("#btnRumble", { timeout: btnRumbleTimeout })
-		.then(() => {
-			return true;
-		})
-		.catch(() => {
-			log("btnRumble not visible");
-			return false;
-		});
-	// if btnRumble not visible, check battle results modal in case the opponent surrendered
-	if (!isBtnRumbleVisible && (await findBattleResultsModal(page))) return;
-	else if (!isBtnRumbleVisible) return;
-
-	await page.waitForTimeout(5000);
-	await page
-		.$eval("#btnRumble", (elem) => elem.click())
-		// .then(() => console.log("btnRumble clicked"))
-		.catch(() => log("btnRumble didnt click")); //start rumble
-	await page
-		.waitForSelector("#btnSkip", { timeout: 10000 })
-		// .then(() => console.log("btnSkip visible"))
-		.catch(() => log("btnSkip not visible"));
-	await page
-		.$eval("#btnSkip", (elem) => elem.click())
-		// .then(() => console.log("btnSkip clicked"))
-		.catch(() => log("btnSkip not visible")); //skip rumble
-	await page.waitForTimeout(5000);
-
-	await findBattleResultsModal(page);
 }
 
 async function startBotPlayMatch(page, browser) {
@@ -430,6 +404,19 @@ async function startBotPlayMatch(page, browser) {
 		await page.waitForTimeout(8000);
 		await closePopups(page);
 		await closePopups(page);
+
+		const gamesEntered = await getElementTextByXpath(
+			'//*[@id="my_brawl_entered"]/span[1]'
+		);
+		const totalGames = await getElementTextByXpath(
+			'//*[@id="my_brawl_entered"]/span[2]'
+		);
+
+		const battlesToEnter = Math.abs(
+			parseInt(totalGames) - parseInt(gamesEntered)
+		);
+
+		log("Submitting " + battlesToEnter + " teams..");
 
 		// LAUNCH the battle
 		if (!(await launchBattle(page)))
@@ -495,6 +482,11 @@ async function startBotPlayMatch(page, browser) {
 					log("Create team didnt work, waiting 5 sec and retry");
 					await page.reload();
 					await page.waitForTimeout(5000);
+
+					//clicking into guild battle
+					if (!(await launchBattle(page)))
+						throw new Error("The Battle cannot start");
+
 					startFight = await clickCreateTeamButton(page);
 				}
 			}
