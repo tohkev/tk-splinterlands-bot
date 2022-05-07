@@ -232,7 +232,7 @@ async function clickFilterElement(page, teamToPlay, matchDetails) {
 
 	await page
 		.waitForXPath(`//div[@data-original-title="${playTeamColor}"]`, {
-			timeout: 8000,
+			timeout: 10000,
 		})
 		.then((selector) => {
 			selector.click();
