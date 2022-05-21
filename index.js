@@ -342,7 +342,7 @@ async function logGame(teamToPlay, matchDetails) {
 }
 
 async function clickCards(page, teamToPlay, matchDetails) {
-	const maxRetries = 6;
+	const maxRetries = 3;
 	let retriesNum = 1;
 	let allCardsClicked = false;
 

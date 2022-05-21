@@ -10,15 +10,15 @@ const summoners = {
 	// 224: "dragon", drake
 	// 189: "earth", wizard of eastwood
 	// 145: "death", contessa l'ament
-	240: "dragon",
+	// 240: "dragon",
 	// 167: "fire",  pyre
 	438: "death",
 	// 156: "life", mother khala
 	440: "fire",
-	114: "dragon",
+	// 114: "dragon",
 	441: "life",
 	439: "earth",
-	262: "dragon",
+	// 262: "dragon",
 	261: "life",
 	// 178: "water",  bortus
 	258: "death",
@@ -32,11 +32,11 @@ const summoners = {
 	259: "earth",
 	74: "death",
 	72: "earth",
-	442: "dragon",
+	// 442: "dragon", quix
 	71: "water",
-	88: "dragon",
-	78: "dragon",
-	200: "dragon",
+	// 88: "dragon",
+	// 78: "dragon",
+	// 200: "dragon",
 	16: "water",
 	239: "life",
 	254: "water",
@@ -44,15 +44,15 @@ const summoners = {
 	113: "life",
 	109: "death",
 	110: "fire",
-	291: "dragon",
+	// 291: "dragon",
 	278: "earth",
 	236: "fire",
-	56: "dragon",
+	// 56: "dragon",
 	112: "earth",
 	111: "water",
-	56: "dragon",
-	205: "dragon",
-	130: "dragon",
+	// 56: "dragon",
+	// 205: "dragon",
+	// 130: "dragon",
 };
 
 const summonerColor = (id) => {
