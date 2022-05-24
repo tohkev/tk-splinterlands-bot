@@ -60,7 +60,7 @@ async function checkMana(page) {
 
 async function checkMatchMana(page) {
 	const mana = await page.$$eval(
-		"section.combat_info > div > div > div.mana-cap__icon",
+		"div.combat_info > div > div > div.mana-cap__icon",
 		(el) => el.map((x) => x.getAttribute("data-original-title"))
 	);
 	const manaValue = parseInt(mana[0].split(":")[1], 10);
