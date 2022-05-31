@@ -144,34 +144,25 @@ const teamSelection = async (possibleTeams, matchDetails, quest) => {
 	log("quest custom option set as:", priorityToTheQuest);
 
 	//CHECK FOR QUEST:
-	if (
-		priorityToTheQuest &&
-		possibleTeams.length > 1 &&
-		quest &&
-		quest.total
-	) {
-		const left = quest.total - quest.completed;
-		const questCheck =
-			matchDetails.splinters.includes(quest.splinter) && left > 0;
+	if (priorityToTheQuest && possibleTeams.length > 1 && quest) {
+		const questCheck = matchDetails.splinters.includes(quest.splinter);
 		const filteredTeamsForQuest = possibleTeams.filter(
 			(team) => team[7] === quest.splinter
 		);
-		log(left + " battles left for the " + quest.splinter + " quest");
-		log("play for the quest ", quest.splinter, "? ", questCheck);
+		log("play for the focus: ", quest.splinter, "? ", questCheck);
 
 		if (
-			left > 0 &&
 			filteredTeamsForQuest?.length >= 1 &&
 			questCheck &&
 			filteredTeamsForQuest[0][8]
 		) {
-			log("Playing for quest..");
+			log("Playing for focus..");
 			return {
 				summoner: filteredTeamsForQuest[0][0],
 				cards: filteredTeamsForQuest[0],
 			};
 		} else {
-			log("Not considering quest..");
+			log("No viable teams found, not considering focus..");
 			return {
 				summoner: possibleTeams[0][0],
 				cards: possibleTeams[0],

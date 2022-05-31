@@ -598,19 +598,18 @@ async function startBotPlayMatch(page, browser) {
 		if (
 			process.env.SKIP_QUEST &&
 			quest?.splinter &&
-			process.env.SKIP_QUEST.split(",").includes(quest?.splinter) &&
-			quest?.total !== quest?.completed
+			process.env.SKIP_QUEST.split(",").includes(quest?.splinter)
 		) {
 			try {
 				await page
 					.click("#quest_new_btn")
 					.then(async (a) => {
 						await page.reload();
-						log("New quest requested");
+						log("New focus requested");
 					})
-					.catch((e) => log("Cannot click on new quest"));
+					.catch((e) => log("Cannot click on new focus"));
 			} catch (e) {
-				log("Error while skipping new quest");
+				log("Error while skipping new focus");
 			}
 		}
 
@@ -663,7 +662,7 @@ async function startBotPlayMatch(page, browser) {
 		log(
 			"claim daily quest setting:",
 			process.env.CLAIM_DAILY_QUEST_REWARD,
-			"Quest details: ",
+			"focus details: ",
 			quest
 		);
 		const isClaimDailyQuestMode =

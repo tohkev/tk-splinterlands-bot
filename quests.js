@@ -2,15 +2,12 @@ const fetch = require("node-fetch");
 const log = require("fancy-log");
 
 const quests = [
-	{ name: "Defend the Borders", element: "life" },
-	{ name: "Pirate Attacks", element: "water" },
-	{ name: "High Priority Targets", element: "snipe" },
-	{ name: "Lyanna's Call", element: "earth" },
-	{ name: "Stir the Volcano", element: "fire" },
-	{ name: "Rising Dead", element: "death" },
-	{ name: "Stubborn Mercenaries", element: "neutral" },
-	{ name: "Gloridax Revenge", element: "dragon" },
-	{ name: "Stealth Mission", element: "sneak" },
+	{ name: "defend", element: "life" },
+	{ name: "pirate", element: "water" },
+	{ name: "lyanna", element: "earth" },
+	{ name: "stir", element: "fire" },
+	{ name: "rising", element: "death" },
+	{ name: "gloridax", element: "dragon" },
 ];
 
 const getQuestSplinter = (questName) => {
@@ -39,15 +36,13 @@ const getPlayerQuest = (username) =>
 				const questDetails = {
 					name: x[0].name,
 					splinter: getQuestSplinter(x[0].name),
-					total: x[0].total_items,
-					completed: x[0].completed_items,
 				};
 				return questDetails;
 			}
 		})
 		.catch(() => {
 			log(
-				"Error: game-api.splinterlands did not respond trying api.slinterlands... "
+				"Error: game-api.splinterlands did not respond trying api.splinterlands... "
 			);
 			fetch(
 				`https://api.splinterlands.io/players/quests?username=${username}`,
@@ -69,8 +64,6 @@ const getPlayerQuest = (username) =>
 						const questDetails = {
 							name: x[0].name,
 							splinter: getQuestSplinter(x[0].name),
-							total: x[0].total_items,
-							completed: x[0].completed_items,
 						};
 						return questDetails;
 					}
