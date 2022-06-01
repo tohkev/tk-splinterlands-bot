@@ -59,6 +59,7 @@ async function checkMana(page) {
 }
 
 async function checkMatchMana(page) {
+	log("Getting mana..");
 	const mana = await page.$$eval(
 		"div.combat_info > div > div > div.mana-cap__icon",
 		(el) => el.map((x) => x.getAttribute("data-original-title"))
@@ -68,6 +69,7 @@ async function checkMatchMana(page) {
 }
 
 async function checkMatchRules(page) {
+	log("Getting ruleset..");
 	const rules = await page.$$eval(
 		"div.combat__rules > div > div>  img",
 		(el) => el.map((x) => x.getAttribute("data-original-title"))
@@ -76,6 +78,7 @@ async function checkMatchRules(page) {
 }
 
 async function checkMatchActiveSplinters(page) {
+	log("Getting active splinters..");
 	const splinterUrls = await page.$$eval(
 		"div.active_element_list > img",
 		(el) => el.map((x) => x.getAttribute("src"))

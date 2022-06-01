@@ -689,6 +689,7 @@ async function startBotPlayMatch(page, browser) {
 		await page.waitForTimeout(5000);
 
 		// LAUNCH the battle
+		log("Launching battle..");
 		if (!(await launchBattle(page)))
 			throw new Error("The Battle cannot start");
 
