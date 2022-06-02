@@ -36,6 +36,7 @@ const getPlayerQuest = (username) =>
 				const questDetails = {
 					name: x[0].name,
 					splinter: getQuestSplinter(x[0].name),
+					created_date: x[0].created_date,
 				};
 				return questDetails;
 			}

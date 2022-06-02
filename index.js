@@ -47,6 +47,13 @@ async function getQuest() {
 		);
 }
 
+async function checkNewFocus(time) {
+	const yesterday = new Date(time);
+	const now = new Date();
+	const diff = Math.abs(now - yesterday) / 60 / 60 / 1000;
+	return diff >= 24;
+}
+
 async function closePopups(page) {
 	if (await clickOnElement(page, ".close", 4000)) return;
 	await clickOnElement(page, ".modal-close-new", 1000, 2000);
@@ -595,6 +602,30 @@ async function startBotPlayMatch(page, browser) {
 			);
 		}
 
+		if (quest && (await checkNewFocus(quest.created_date))) {
+			log("new focus available!");
+			try {
+				await page
+					.waitForSelector("#focus_new_btn", {
+						visible: true,
+						timeout: 3000,
+					})
+					.then(async (button) => {
+						button.click();
+						log(`getting new focus..`);
+						await page.waitForTimeout(20000);
+						await page.reload();
+					})
+					.catch(() => log(`unable to get new focus`));
+				await page.waitForTimeout(3000);
+				await page.reload();
+			} catch (e) {
+				log("Error while getting new focus");
+			}
+
+			await page.waitForTimeout(5000);
+		}
+
 		if (
 			process.env.SKIP_QUEST &&
 			quest?.splinter &&
@@ -607,9 +638,9 @@ async function startBotPlayMatch(page, browser) {
 						await page.reload();
 						log("New focus requested");
 					})
-					.catch((e) => log("Cannot click on new focus"));
+					.catch((e) => log("Cannot request new focus"));
 			} catch (e) {
-				log("Error while skipping new focus");
+				log("Error while skipping focus");
 			}
 		}
 
@@ -804,7 +835,7 @@ async function startBotPlayMatch(page, browser) {
 		if (startFight) await commenceBattle(page);
 		else await findBattleResultsModal(page);
 	} catch (e) {
-		log(chalk.bold.redBright("No teams found, skipping game.."));
+		log(chalk.bold.redBright("Error: unable to start or complete game"));
 	}
 }
 
