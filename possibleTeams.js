@@ -89,12 +89,13 @@ const convertBattlesToArray = (battles) => {
 
 const getBattlesWithRuleset = (ruleset, mana, splinters, player) => {
 	try {
+		const wild = process.env.FORMAT.toLowerCase() === "wild" ? true : false;
 		const rulesetEncoded = encodeURIComponent(ruleset);
 		const summoners = getSummonersFromSplinter(splinters);
 		const host = process.env.API || "http://localhost:5000/";
 		const url = `getteams?ruleset=${rulesetEncoded}&mana=${mana}&player=${player}&summoners=${
 			summoners ? JSON.stringify(summoners) : ""
-		}&gladius=false`;
+		}&wild=${wild}&gladius=false`;
 
 		log("API call: ", host + url);
 		return fetch(host + url, { timeout: 10000 })
@@ -110,6 +111,7 @@ const getBattlesWithRuleset = (ruleset, mana, splinters, player) => {
 
 const getBattlesGeneral = (ruleset, mana, splinters, player) => {
 	try {
+		const wild = process.env.FORMAT.toLowerCase() === "wild" ? true : false;
 		const summoners = getSummonersFromSplinter(splinters);
 		const host = process.env.API || "http://localhost:5000/";
 		let rulesetEncoded = "";
@@ -124,7 +126,7 @@ const getBattlesGeneral = (ruleset, mana, splinters, player) => {
 
 		const url = `getteams?ruleset=${rulesetEncoded}&mana=${mana}&player=${player}&summoners=${
 			summoners ? JSON.stringify(summoners) : ""
-		}&gladius=false`;
+		}&wild=${wild}&gladius=false`;
 
 		log("API call: ", host + url);
 		return fetch(host + url, { timeout: 10000 })
