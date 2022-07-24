@@ -338,9 +338,9 @@ async function logGame(teamToPlay, matchDetails) {
 
 	for (let i = 0; i < teamData.length; i++) {
 		teamTable.cell("Card", i === 0 ? "Summoner" : `Monster #${i}`);
-		teamTable.cell("ID", teamData[i].id);
-		teamTable.cell("Name", teamData[i].name);
-		teamTable.cell("Splinter", colorMap[teamData[i].color]);
+		teamTable.cell("ID", teamData[i]?.id);
+		teamTable.cell("Name", teamData[i]?.name);
+		teamTable.cell("Splinter", colorMap[teamData[i]?.color]);
 		teamTable.newRow();
 	}
 
@@ -504,6 +504,33 @@ async function commenceBattle(page) {
 	await page.waitForTimeout(5000);
 
 	await findBattleResultsModal(page);
+}
+
+async function checkFormat(page, format) {
+	console.log("Checking game format..");
+
+	let currentFormat = await page.$eval(".selected", (el) => el.innerText);
+
+	if (format.toLowerCase() !== currentFormat.toLowerCase()) {
+		//click on the modern tab
+		await page
+			.waitForXPath(`//a[contains(., '${format.toUpperCase()}')]`, {
+				timeout: 20000,
+			})
+			.then((button) => {
+				button.click();
+				log(`Switched to ${format}`);
+				return true;
+			})
+			.catch(() => {
+				console.error(
+					"[ERROR] Can't switch game format. is Splinterlands in maintenance?"
+				);
+				return false;
+			});
+	} else {
+		log(`Playing ${format}`);
+	}
 }
 
 async function startBotPlayMatch(page, browser) {
@@ -717,6 +744,11 @@ async function startBotPlayMatch(page, browser) {
 				);
 			}
 		}
+		await page.waitForTimeout(5000);
+
+		//SWITCH game format
+		await checkFormat(page, process.env.FORMAT);
+
 		await page.waitForTimeout(5000);
 
 		// LAUNCH the battle
