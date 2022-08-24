@@ -24,7 +24,7 @@ const colorMap = require("./util/colorMap");
 let isMultiAccountMode = false;
 let account = "";
 let password = "";
-let totalDec = 0;
+let totalSps = 0;
 let winTotal = 0;
 let loseTotal = 0;
 let undefinedTotal = 0;
@@ -64,13 +64,13 @@ async function checkEcr(page) {
 	try {
 		const ecr = await getElementTextByXpath(
 			page,
-			"//div[@class='dec-options'][1]/div[@class='value'][2]/div",
+			"//div[@class='sps-options'][1]/div[@class='value'][2]/div",
 			100
 		);
 		if (ecr) {
 			log(
 				chalk.bold.whiteBright.bgMagenta(
-					"Your current Energy Capture Rate is " +
+					"Your current SPS Capture Rate is " +
 						ecr.split(".")[0] +
 						"%"
 				)
@@ -410,13 +410,13 @@ async function findBattleResultsModal(page) {
 			15000
 		);
 		if (winner.trim() == account) {
-			const decWon = await getElementText(
+			const spsWon = await getElementText(
 				page,
-				".player.winner span.dec-reward span",
+				".player.winner span.sps-reward span",
 				1000
 			);
-			log(chalk.green("You won! Reward: " + decWon + " DEC"));
-			totalDec += !isNaN(parseFloat(decWon)) ? parseFloat(decWon) : 0;
+			log(chalk.green("You won! Reward: " + spsWon + " SPS"));
+			totalSps += !isNaN(parseFloat(spsWon)) ? parseFloat(spsWon) : 0;
 			winTotal += 1;
 		} else {
 			log(chalk.red("You lost"));
@@ -436,7 +436,7 @@ async function findBattleResultsModal(page) {
 			chalk.yellow(" - Draw? Total: " + undefinedTotal) +
 			chalk.red(" - Lost Total: " + loseTotal)
 	);
-	log(chalk.green("Total Earned: " + totalDec + " DEC"));
+	log(chalk.green("Total Earned: " + totalSps + " SPS"));
 
 	return true;
 }
