@@ -212,7 +212,8 @@ async function clickSummonerCard(page, teamToPlay) {
 			timeout: 10000,
 		})
 		.then((card) => {
-			card.click();
+			// card.click();
+			card.evaluate((c) => c.click());
 		})
 		.catch(() => {
 			clicked = false;
@@ -242,7 +243,7 @@ async function clickFilterElement(page, teamToPlay, matchDetails) {
 			timeout: 10000,
 		})
 		.then((selector) => {
-			selector.click();
+			selector.evaluate((s) => s.click());
 		})
 		.catch(() => {
 			log(chalk.bold.redBright("filter element not clicked"));
@@ -276,7 +277,7 @@ async function clickMembersCard(page, teamToPlay) {
 					{ timeout: 10000 }
 				)
 				.then((card) => {
-					card.click();
+					card.evaluate((c) => c.click());
 				})
 				.catch(() => {
 					clicked = false;
@@ -364,11 +365,13 @@ async function clickCards(page, teamToPlay, matchDetails) {
 			}
 		}
 
+		console.log("Clicking summoner card..");
 		if (!(await clickSummonerCard(page, teamToPlay))) {
 			retriesNum++;
 			continue;
 		}
 
+		console.log("Clicking element..");
 		if (
 			card.color(teamToPlay.cards[0]) === "Gold" &&
 			!(await clickFilterElement(page, teamToPlay, matchDetails))
@@ -378,6 +381,7 @@ async function clickCards(page, teamToPlay, matchDetails) {
 		}
 		await page.waitForTimeout(5000);
 
+		console.log("Clicking remaining cards..");
 		if (!(await clickMembersCard(page, teamToPlay))) {
 			retriesNum++;
 			continue;
