@@ -1,0 +1,17 @@
+###remove the initial #to uncomment a line
+#CHROME_EXEC=/usr/bin/google-chrome-stable
+QUEST_PRIORITY=true
+MINUTES_BATTLES_INTERVAL=15
+CLAIM_SEASON_REWARD=false
+CLAIM_DAILY_QUEST_REWARD=true
+#ECR_STOP_LIMIT=50 
+#ECR_RECOVER_TO=99
+SKIP_QUEST=dragon
+#FAVOURITE_DECK=dragon #choose only one splinter among: fire, life, earth, water, death, dragon
+MULTI_ACCOUNT=true
+FORCE_LOCAL_HISTORY=false
+ACCOUNT=snud,jytjyt,voltriph,mugger,snudi,vorpalrooster,beingthenhub,amthenhub,bethenhub,jytjyt2,jytjyt3,mapl3sn0ws
+PASSWORD=5JrDgjxVFR6E9VXoMdm8Tn7GtRAyXp7RBvBS85HfrM4huU7cWWV,5KUgcAgUZG4Xp5knQL7nvK1Pr6YT8C2G8nGBFQip6BaQQt3EcYb,5KXuTpji81bN34GDAQ7sPcraPavNyQdoYK4kSzVeF7MwrdP4MfQ,5J4aj3UtEF2AzvA3mMCNEzHjHBzDRMzgoT5UpUQ9xgeDpZqZr2h,5JCpBPS9APqpDDiX65DVY22fsT51CwRJTogJFTEWQrFiLzusLK6,5K4rR5TMLT3xyet4AzdwYpVzZLUTNDsEHT1wAuZctwrQd3VfivL,5Jy56M4QTz143gqFhV3AbkZhL4W41tppRJQgoMuDywpEENv8KWW,5JBMLj8SsAsEhzBWQdLV6ihfkdKN4YC99jkoDZtcznikRMnk3dE,5KJwaVVfCCXza1eyjXeVJCuEZYTVs6o6BrK22fzGSEGdcwGYkTZ,5KHtdeedbuNemVhMdQ4JE8d2tAiZHoqLW7uMmfTdhYcVEkvVWV2,5Jnu9aScgha1c7z8uMncySbmxSACxtVjEyiFbwKHG1Pc1EimgGt,5KJLcwJeJMpcGN28FQUZnGFsa52DKTu5ugCQfEiNJepe5JBfLim
+
+#DELEGATED_CARDS_PRIORITY=true
+#API=http://splinterlandsapi2.pcjones.de:8080/

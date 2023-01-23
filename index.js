@@ -155,7 +155,7 @@ async function launchBattle(page) {
 		log(`Launch battle iter-[${retriesNum}]`);
 		if (findOpponentDialogStatus === 0) {
 			isStartBattleSuccess = await page
-				.waitForXPath("//button[contains(., 'BATTLE')]", {
+				.waitForXPath("//button[@id='battle_category_btn']/span", {
 					timeout: 20000,
 				})
 				.then((button) => {
@@ -212,8 +212,10 @@ async function clickSummonerCard(page, teamToPlay) {
 			timeout: 10000,
 		})
 		.then((card) => {
-			// card.click();
 			card.evaluate((c) => c.click());
+		})
+		.then(()=>{
+			log(`${teamToPlay.summoner} clicked`)
 		})
 		.catch(() => {
 			clicked = false;
@@ -235,7 +237,7 @@ async function clickFilterElement(page, teamToPlay, matchDetails) {
 			visible: true,
 			timeout: 10000,
 		})
-		// .then(() => console.log("filter element visible"))
+		.then(() => log("filter element visible"))
 		.catch(() => log("filter element not visible"));
 
 	await page
@@ -244,6 +246,9 @@ async function clickFilterElement(page, teamToPlay, matchDetails) {
 		})
 		.then((selector) => {
 			selector.evaluate((s) => s.click());
+		})
+		.then(()=>{
+			log(`${playTeamColor} clicked`)
 		})
 		.catch(() => {
 			log(chalk.bold.redBright("filter element not clicked"));
@@ -278,6 +283,9 @@ async function clickMembersCard(page, teamToPlay) {
 				)
 				.then((card) => {
 					card.evaluate((c) => c.click());
+				})
+				.then(()=>{
+					log(`${teamToPlay.cards[i]} clicked`)
 				})
 				.catch(() => {
 					clicked = false;
@@ -543,17 +551,20 @@ async function startBotPlayMatch(page, browser) {
 		await page.setUserAgent(
 			"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/62.0.3163.100 Safari/537.36"
 		);
+		// log("Set user agent..");
 		await page.setViewport({
 			width: 1800,
 			height: 1500,
 			deviceScaleFactor: 1,
 		});
+		// log("Set viewport..")
 
 		await page.goto("https://splinterlands.com/");
 		await page.waitForTimeout(8000);
+		// log("Navigating to website..");
 
 		let item = await page
-			.waitForSelector("#log_in_button > button", {
+			.waitForSelector("#log_in_button > .new-button", {
 				visible: true,
 			})
 			.then((res) => res)
@@ -568,10 +579,14 @@ async function startBotPlayMatch(page, browser) {
 				});
 		}
 
+		// log("Logging in to website..");
+
 		await page.goto("https://splinterlands.com/?p=battle_history");
 		await page.waitForTimeout(8000);
 		await closePopups(page);
 		await closePopups(page);
+
+		// log("Navigating to battle history..");
 
 		const ecr = await checkEcr(page);
 		if (ecr === undefined) throw new Error("Fail to get ECR.");
@@ -783,6 +798,8 @@ async function startBotPlayMatch(page, browser) {
 			splinters: splinters,
 			myCards: myCards,
 		};
+
+		// log(matchDetails);
 		await page.waitForTimeout(2000);
 		let possibleTeams = await ask
 			.getBattlesWithRuleset(rules, mana, splinters, account)
@@ -849,17 +866,17 @@ async function startBotPlayMatch(page, browser) {
 		await page.waitForTimeout(5000);
 		await page
 			.waitForSelector(".btn-green", { timeout: 1000 })
-			// .then(() => console.log("btn-green visible"))
+			.then(() => log("btn-green visible"))
 			.catch(() => log("btn-green not visible"));
 		await page
 			.$eval(".btn-green", (elem) => elem.click())
-			// .then(() => console.log("btn-green clicked"))
+			.then(() => log("btn-green clicked"))
 			.catch(async () => {
 				log("Start Fight didnt work, waiting 5 sec and retry");
 				await page.waitForTimeout(5000);
 				await page
 					.$eval(".btn-green", (elem) => elem.click())
-					// .then(() => console.log("btn-green clicked"))
+					.then(() => log("btn-green clicked"))
 					.catch(() => {
 						startFight = false;
 						log(

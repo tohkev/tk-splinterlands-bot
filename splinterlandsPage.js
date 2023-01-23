@@ -7,7 +7,7 @@ async function login(page, account, password) {
 		);
 		await page
 			.waitForSelector("input[name='email']")
-			.then(() => page.waitForTimeout(3000))
+			.then(() => page.waitForTimeout(5000))
 			.then(() => page.focus("input[name='email']"))
 			.then(() => page.type("input[name='email']", account))
 			.then(() => page.focus("input[name='password']"))
@@ -64,37 +64,37 @@ async function checkMatchMana(page) {
 		"div.combat_info > div > div > div.mana-cap__icon",
 		(el) => el.map((x) => x.getAttribute("data-original-title"))
 	);
-	const manaValue = parseInt(mana[0].split(":")[1], 10);
+	const manaValue = parseInt(mana[0].split(": ")[1], 10);
 	return manaValue;
 }
 
 async function checkMatchRules(page) {
 	log("Getting ruleset..");
 	const rules = await page.$$eval(
-		"div.combat__rules > div > div>  img",
+		"div.combat__rules > div > div > img",
 		(el) => el.map((x) => x.getAttribute("data-original-title"))
 	);
 	return rules.map((x) => x.split(":")[0]).join("|");
 }
 
 async function checkMatchActiveSplinters(page) {
+	let splintersRoute = "div.active_element_list > img";
 	log("Getting active splinters..");
 	const splinterUrls = await page.$$eval(
-		"div.active_element_list > img",
-		(el) => el.map((x) => x.getAttribute("src"))
+		splintersRoute,
+		(el) => el.map((x) => x.getAttribute("data-original-title"))
 	);
+	// log("SplinterUrls", splinterUrls);
 	return splinterUrls
 		.map((splinter) => splinterIsActive(splinter))
-		.filter((x) => x);
+		.filter((x) => !!x);
 }
 
 const splinterIsActive = (splinterUrl) => {
 	const splinter = splinterUrl
-		.split("/")
-		.slice(-1)[0]
-		.replace(".svg", "")
-		.replace("icon_splinter_", "");
-	return splinter.indexOf("inactive") === -1 ? splinter : "";
+		.toLowerCase()
+		.split(": ")
+	return splinter.indexOf("inactive") === -1 ? splinter[0] : "";
 };
 
 exports.login = login;
