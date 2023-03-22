@@ -61,7 +61,7 @@ async function checkMana(page) {
 async function checkMatchMana(page) {
 	log("Getting mana..");
 	const mana = await page.$$eval(
-		"div.combat_info > div > div > div.mana-cap__icon",
+		"div.combat_info > div:nth-of-type(6) > div > div.mana-cap__icon",
 		(el) => el.map((x) => x.getAttribute("data-original-title"))
 	);
 	const manaValue = parseInt(mana[0].split(": ")[1], 10);
@@ -78,7 +78,7 @@ async function checkMatchRules(page) {
 }
 
 async function checkMatchActiveSplinters(page) {
-	let splintersRoute = "div.active_element_list > img";
+	let splintersRoute = "div.combat__splinters > div.active_element_list > img";
 	log("Getting active splinters..");
 	const splinterUrls = await page.$$eval(
 		splintersRoute,
