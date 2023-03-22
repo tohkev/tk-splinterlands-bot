@@ -588,58 +588,58 @@ async function startBotPlayMatch(page, browser) {
 
 		// log("Navigating to battle history..");
 
-		const ecr = await checkEcr(page);
-		if (ecr === undefined) throw new Error("Fail to get ECR.");
+		// const ecr = await checkEcr(page);
+		// if (ecr === undefined) throw new Error("Fail to get ECR.");
 
-		if (
-			process.env.ECR_STOP_LIMIT &&
-			process.env.ECR_RECOVER_TO &&
-			ecr < parseFloat(process.env.ECR_STOP_LIMIT)
-		) {
-			if (ecr < parseFloat(process.env.ECR_STOP_LIMIT)) {
-				log(
-					chalk.bold.red(
-						`ECR lower than limit ${
-							process.env.ECR_STOP_LIMIT
-						}%. reduce the limit in the env file config or wait until ECR will be at ${
-							process.env.ECR_RECOVER_TO || "100"
-						}%`
-					)
-				);
-			} else if (ecr < parseFloat(process.env.ECR_RECOVER_TO)) {
-				log(
-					chalk.bold.red(
-						`ECR Not yet Recovered to ${process.env.ECR_RECOVER_TO}`
-					)
-				);
-			}
+		// if (
+		// 	process.env.ECR_STOP_LIMIT &&
+		// 	process.env.ECR_RECOVER_TO &&
+		// 	ecr < parseFloat(process.env.ECR_STOP_LIMIT)
+		// ) {
+		// 	if (ecr < parseFloat(process.env.ECR_STOP_LIMIT)) {
+		// 		log(
+		// 			chalk.bold.red(
+		// 				`ECR lower than limit ${
+		// 					process.env.ECR_STOP_LIMIT
+		// 				}%. reduce the limit in the env file config or wait until ECR will be at ${
+		// 					process.env.ECR_RECOVER_TO || "100"
+		// 				}%`
+		// 			)
+		// 		);
+		// 	} else if (ecr < parseFloat(process.env.ECR_RECOVER_TO)) {
+		// 		log(
+		// 			chalk.bold.red(
+		// 				`ECR Not yet Recovered to ${process.env.ECR_RECOVER_TO}`
+		// 			)
+		// 		);
+		// 	}
 
-			// calculating time needed for recovery
-			ecrNeededToRecover =
-				parseFloat(process.env.ECR_RECOVER_TO) - parseFloat(ecr);
-			recoveryTimeInHours = Math.ceil(
-				ecrNeededToRecover / ecrRecoveryRatePerHour
-			);
+		// 	// calculating time needed for recovery
+		// 	ecrNeededToRecover =
+		// 		parseFloat(process.env.ECR_RECOVER_TO) - parseFloat(ecr);
+		// 	recoveryTimeInHours = Math.ceil(
+		// 		ecrNeededToRecover / ecrRecoveryRatePerHour
+		// 	);
 
-			log(
-				chalk.bold.white(
-					`Time needed to recover ECR, approximately ${
-						recoveryTimeInHours * 60
-					} minutes.`
-				)
-			);
-			await closeBrowser(browser);
-			log(
-				chalk.bold.white(
-					`Initiating sleep mode. The bot will awaken at ${new Date(
-						Date.now() + recoveryTimeInHours * 3600 * 1000
-					).toLocaleString()}`
-				)
-			);
-			await sleep(recoveryTimeInHours * 3600 * 1000);
+		// 	log(
+		// 		chalk.bold.white(
+		// 			`Time needed to recover ECR, approximately ${
+		// 				recoveryTimeInHours * 60
+		// 			} minutes.`
+		// 		)
+		// 	);
+		// 	await closeBrowser(browser);
+		// 	log(
+		// 		chalk.bold.white(
+		// 			`Initiating sleep mode. The bot will awaken at ${new Date(
+		// 				Date.now() + recoveryTimeInHours * 3600 * 1000
+		// 			).toLocaleString()}`
+		// 		)
+		// 	);
+		// 	await sleep(recoveryTimeInHours * 3600 * 1000);
 
-			throw new Error(`Restart needed.`);
-		}
+		// 	throw new Error(`Restart needed.`);
+		// }
 
 		const quest = await getQuest();
 		if (!quest) {
