@@ -118,11 +118,23 @@ const getBattlesGeneral = (ruleset, mana, splinters, player) => {
 
 		const rulesSplit = ruleset.split("|");
 
-		if (isLimitingRule.indexOf(rulesSplit[0]) > -1) {
-			rulesetEncoded = encodeURIComponent(rulesSplit[0]);
-		} else if (isLimitingRule.indexOf(rulesSplit[1]) > -1) {
-			rulesetEncoded = encodeURIComponent(rulesSplit[1]);
+		for (let i = 0; i < rulesSplit.length; i++){
+			if (isLimitingRule.indexOf(rulesSplit[i]) > -1){
+				if (rulesetEncoded === ""){
+					rulesetEncoded += rulesSplit[i]
+				}
+				else {
+					rulesetEncoded += ("|" + rulesSplit[i])
+				}
+			}
 		}
+
+		rulesetEncoded = encodeURIComponent(rulesetEncoded);
+		// if (isLimitingRule.indexOf(rulesSplit[0]) > -1) {
+		// 	rulesetEncoded = encodeURIComponent(rulesSplit[0]);
+		// } else if (isLimitingRule.indexOf(rulesSplit[1]) > -1) {
+		// 	rulesetEncoded = encodeURIComponent(rulesSplit[1]);
+		// }
 
 		const url = `getteams?ruleset=${rulesetEncoded}&mana=${mana}&player=${player}&summoners=${
 			summoners ? JSON.stringify(summoners) : ""
