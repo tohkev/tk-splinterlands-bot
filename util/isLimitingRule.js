@@ -5,10 +5,12 @@ const limitingRules = [
 	"Little League",
 	"Lost Legendaries",
 	"Lost Magic",
-	"Odds Ones Out",
-	"Rise Of Commons",
+	"Odd Ones Out",
+	"Rise of the Commons",
 	"Taking Sides",
 	"Up Close & Personal",
+	"Going the Distance",
+	"Wands Out"
 ];
 
 module.exports = limitingRules;
